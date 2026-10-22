@@ -1,5 +1,7 @@
 # OpenSheet
 
+![Icon](Icon.png)
+
 A free spreadsheet library for .NET: read, write and edit **XLSX, XLS, CSV/TSV, JSON and XML**, with formulas, styles,
 data validation, conditional formatting, images, charts, tables and file encryption.
 
@@ -126,6 +128,17 @@ formula bank and the number formats are recorded in `Oracle/*.golden.txt`, and r
 machine with Excel: set `OPENSHEET_RECORD_GOLDEN=1` and run the two oracle tests. Details in [`tests/OpenSheet.Tests/Oracle/README.md`](tests/OpenSheet.Tests/Oracle/README.md).
 
 A repository-local `nuget.config` points at nuget.org so a machine-wide package-source mapping cannot block restoring NPOI.
+
+## Releasing
+
+The version is the git tag; nothing in the repository holds it. Push a tag and `.github/workflows/release.yml` builds, tests, packs and creates the
+GitHub release with the `.nupkg` attached and notes generated from the commits and PRs since the previous tag:
+
+```
+git tag v1.2.0 && git push origin v1.2.0          # v1.2.0-beta.1 is published as a pre-release
+```
+
+To also publish to nuget.org, add a `NUGET_API_KEY` repository secret; without it that step is skipped. Locally: `dotnet pack src/OpenSheet -c Release -p:Version=1.2.0`.
 
 ## Licensing and provenance
 

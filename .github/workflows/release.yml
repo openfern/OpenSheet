@@ -1,0 +1,51 @@
+name: release
+
+# Publish by pushing a tag:   git tag v1.2.0 && git push origin v1.2.0
+# A tag with a dash (v1.2.0-beta.1) is published as a pre-release. The tag is the only place the version lives.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Version from the tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: dotnet build src/OpenSheet -c Release -warnaserror -p:Version=$VERSION
+
+      - name: Test (net8.0 and net10.0)
+        run: dotnet test tests/OpenSheet.Tests -c Release
+
+      - name: Pack
+        run: dotnet pack src/OpenSheet -c Release --no-build -p:Version=$VERSION -o artifacts
+
+      - name: GitHub release (notes are generated from the commits and PRs since the last tag)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flags=""
+          if [[ "$VERSION" == *-* ]]; then flags="--prerelease"; fi
+          gh release create "$GITHUB_REF_NAME" artifacts/*.nupkg --title "$GITHUB_REF_NAME" --generate-notes $flags
+
+      - name: Publish to nuget.org (only when the NUGET_API_KEY secret is set)
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if [ -n "$NUGET_API_KEY" ]; then
+            dotnet nuget push "artifacts/*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          else
+            echo "NUGET_API_KEY not set: skipping nuget.org"
+          fi
