@@ -1,0 +1,29 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup Label="Library">
+    <!-- Pinned at 2.7.6: the last NPOI binary release under plain Apache-2.0. 2.8.x ships an "Open Source Maintenance Fee" EULA. -->
+    <PackageVersion Include="NPOI" Version="[2.7.6]" />
+    <!-- NPOI 2.7.6 pulls in 8.0.2, which has CVE-2026-26171 (DoS); 8.0.3+ is patched. Remove this pin once NPOI ships a fixed floor. -->
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+    <!-- Cysharp. NPOI already depends on ZString 2.6.0, so this adds nothing new to a consumer's graph. -->
+    <PackageVersion Include="ZString" Version="2.6.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Tests">
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="DocumentFormat.OpenXml" Version="3.3.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup Label="Benchmarks">
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
+
+</Project>

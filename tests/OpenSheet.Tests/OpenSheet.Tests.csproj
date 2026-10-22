@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <!-- The library's netstandard2.0 build is what .NET Framework consumers get; on Windows the tests run it there too. -->
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(TargetFrameworks);net48</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <!-- The Excel oracle tests share one Excel and one log file in %TEMP%, so the target frameworks must not run side by side. -->
+    <TestTfmsInParallel>false</TestTfmsInParallel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="DocumentFormat.OpenXml" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Excel's recorded answers for the formula bank; replayed by FormulaGoldenTests -->
+    <None Include="Oracle\formula-bank.golden.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Oracle\numberformat.golden.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\OpenSheet\OpenSheet.csproj" />
+  </ItemGroup>
+
+</Project>

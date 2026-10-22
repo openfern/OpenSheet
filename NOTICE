@@ -1,0 +1,27 @@
+OpenSheet
+Copyright 2026 OpenSheet contributors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It is built on, and ships with, the following third-party software. Each keeps its own license.
+
+  NPOI 2.7.6                      Apache-2.0   https://github.com/nissl-lab/npoi
+      (.NET port of Apache POI, Copyright The Apache Software Foundation and NPOI contributors)
+      Version 2.7.6 is the last NPOI binary release distributed under plain Apache-2.0.
+      NPOI 2.8.0 and later ship an "Open Source Maintenance Fee" EULA with their NuGet binaries;
+      OpenSheet deliberately does not depend on them.
+
+  ZString 2.6.0                   MIT          https://github.com/Cysharp/ZString
+      (Cysharp. Used directly by OpenSheet for allocation-free string building; NPOI depends on it too.)
+
+  Dependencies pulled in by NPOI 2.7.6 (see each package for the exact terms):
+      BouncyCastle.Cryptography, Enums.NET, ExtendedNumerics.BigDecimal, MathNet.Numerics.Signed,
+      Microsoft.IO.RecyclableMemoryStream, SharpZipLib, ZString, System.Security.Cryptography.Xml   MIT
+      SixLabors.Fonts 1.x, SixLabors.ImageSharp 2.1.x                                               Apache-2.0
+      NSax 1.0.2                                                                                    LGPL-3.0-only
+          NSax is a separate assembly that you may replace with a modified build; if you redistribute
+          an application that includes it, review the LGPL-3.0 terms.
+
+  Microsoft's System.Text.Json (netstandard2.0 target only)                                         MIT
+
+Test and benchmark only (not shipped): xUnit (Apache-2.0), DocumentFormat.OpenXml (MIT), BenchmarkDotNet (MIT).

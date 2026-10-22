@@ -1,0 +1,11 @@
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+
+# vendor-derived working notes must never be committed (see CLEANROOM.md)
+*.local.md
+
+artifacts/
+BenchmarkDotNet.Artifacts/

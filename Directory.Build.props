@@ -1,0 +1,28 @@
+<Project>
+
+  <!-- Settings shared by the library, the tests and the benchmarks. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--
+    SixLabors.ImageSharp 2.1.11 arrives through NPOI 2.7.6, which cannot take another version: the five advisories below were published on
+    2026-10-07 and are fixed only in 4.1.2, a new major version with a different license and API. They concern decoding and encoding TIFF
+    images, ICC profiles and histogram equalization. OpenSheet reaches ImageSharp only to size or decode a picture (IPicture.Resize and
+    IPicture.ToImage), so do not call those on pictures from workbooks you do not trust. Only these five are silenced: a new advisory still
+    warns, and fails CI.
+    Remove this block when NPOI ships a release that no longer pins ImageSharp 2.x.
+  -->
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-gwg2-r3hj-4w44" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-j3p4-wp97-rph4" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-j9gm-c75j-xc9q" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-jjfr-hcj7-qf5w" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wmxv-xphr-5c9g" />
+  </ItemGroup>
+
+</Project>
